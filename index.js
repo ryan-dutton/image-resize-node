@@ -17,7 +17,7 @@ let test_form = `
 			let w = document.getElementById('width').value;
 			let h = document.getElementById('height').value;
 			let k = document.getElementById('key').value;
-			let body = JSON.stringify({u,w,h});
+			let body = JSON.stringify({u,w,h,k});
 			console.log(body);
 			try {
 				let result = await fetch(
@@ -61,9 +61,9 @@ app.get('/', (req, res) => {
 app.post('/', async (req, res) => {
 	console.log(req.body);
 	try {
-		if (!(req.body.key && req.body.key === process.env.KEY)) {
+		if (!(req.body.k && req.body.k === process.env.KEY)) {
 			res.status(401);
-			res.send("Invalid key specified.");
+			res.send("Invalid key specified.",process.env.KEY);
 			return;
 		}
 		let image_response = await fetch(req.body.u);
