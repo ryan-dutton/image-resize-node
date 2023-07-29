@@ -4,6 +4,8 @@ const express = require('express');
 const https = require('https')
 const app = express();
 const port = 3000;
+require('dotenv').config();
+
 
 let input_image_types = ['image/jpeg','image/png','image/gif'];
 
@@ -59,6 +61,11 @@ app.get('/', (req, res) => {
 app.post('/', async (req, res) => {
 	console.log(req.body);
 	try {
+		if (!(req.body.key && req.body.key === process.env.KEY)) {
+			res.status(401);
+			res.send("Invalid key specified.");
+			return;
+		}
 		let image_response = await fetch(req.body.u);
 		let image_blob = await image_response.blob();
 		if (!input_image_types.includes(image_blob.type)) {
@@ -66,8 +73,14 @@ app.post('/', async (req, res) => {
 			res.send("Image URL does not return one of these valid image types: "+input_image_types.join(", "));
 			return;
 		}
-		console.log(image_blob);
-		let new_image_buffer = await sharp(await image_blob.arrayBuffer()).resize(parseInt(req.body.w),parseInt(req.body.h)).png().toBuffer();
+		let new_image_buffer =
+			await sharp(await image_blob.arrayBuffer())
+			.resize(
+				parseInt(req.body.w),
+				parseInt(req.body.h)
+			)
+			.png()
+			.toBuffer();
 		res.status(200);
 		res.send(new_image_buffer);
 		return;
