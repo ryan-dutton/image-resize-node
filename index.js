@@ -38,9 +38,9 @@ let test_form = `
 			
 		}
 	</script>
-	URL:<input size="100" type=text id="url" value="https://www.onthegotours.com/repository/TempleNewImage-209401368023194.jpg"/><br/>
-	Width:<input size="5" type=text id="width" value="100"/><br/>
-	Height:<input size="5" type=text id="height" value="100"/><br/>
+	URL:<input size="100" type=text id="url" value="https://upload.wikimedia.org/wikipedia/commons/c/c2/Uluru%2C_helicopter_view%2C_cropped.jpg"/><br/>
+	Width:<input size="5" type=text id="width" value="200"/><br/>
+	Height:<input size="5" type=text id="height" value="200"/><br/>
 	Key:<input size="50" type=text id="key" value=""/><br/>
 	<button type=button onclick="test();">Test</button><br/>
 	<img src="" id="output"/>
