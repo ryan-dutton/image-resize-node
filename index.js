@@ -3,7 +3,7 @@ const sharp = require('sharp');
 const express = require('express');
 const https = require('https')
 const app = express();
-const port = 3000;
+const port = 443;
 require('dotenv').config();
 
 
@@ -99,7 +99,7 @@ var options = {
   cert: cert
 };
 
-https.createServer(options, app).listen(443);
+https.createServer(options, app).listen(port);
 
 
 //sudo openssl -subj "/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=example.com" req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl.key -out ssl.crt
