@@ -1,5 +1,4 @@
 # About
-
 Use this project to setup an image resizing micro-service using Node JS, Express framework and the Sharp image library. 
 
 2 Routes are created
@@ -9,6 +8,7 @@ Use this project to setup an image resizing micro-service using Node JS, Express
   		- w = The width of the image you want to create  
 		- h = The height of the image you want to create  
 		- k = The key stored in the .env to prevent unauthorised access
+		- f = Output file format, one of 'jpeg', 'png', 'gif'
   		- Example:
       			`{ u: "https://www.somedomain.com/some_image.jpg", w: 200, h: 150, k: "secret" }`
 	- Returns an PNG image body.
@@ -51,7 +51,6 @@ To create a free service using this project, follow these steps:
 - Make note of the public IP address
 
 ## Step 3: Enable access to web-server on the instance
-
 Select your instance in the Oracle console
 - Click on the Virtual Cloud Network
 - Click on security lists
@@ -65,8 +64,8 @@ Select your instance in the Oracle console
 ## Step 4: Test the image resizing service
 - In your web-browser visit https://[PUBLIC_IP]/
 - Agree to the self-signed SSL certificate error
-- Enter the 'secret'
-- Click 'Submit' and see the resized image of Uluru.
+- Enter the secret
+- Click 'test' and see the resized image of Uluru.
 
 Notes:
 The result of the init script should be visible in : /var/log/cloud-init-output.log
