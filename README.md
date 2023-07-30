@@ -3,7 +3,7 @@ Use this project to setup an image resizing micro-service using Node JS, Express
 
 2 Routes are created
 - "POST /"
-	- Accepts a JSON-encoded body with 4 properties u,w,h and k  
+	- Accepts a JSON-encoded body with 4 properties u,w,h,k and f  
 		- u = The URL of the source image  
   		- w = The width of the image you want to create  
 		- h = The height of the image you want to create  
