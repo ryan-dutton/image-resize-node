@@ -42,7 +42,7 @@ To create a free service using this project, follow these steps:
 	`cd image-resize-node`  
 	`sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl.key -out ssl.crt -subj "/C=GB/ST=London/L=London/O=Global Security/OU=IT Department/CN=example.com"`  
 	`npm update`  
-	`sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u opc --hp /home/opc`  
+	`sudo env PATH=$PATH:/usr/bin /usr/local/lib/node_modules/pm2/bin/pm2 startup systemd -u root --hp /root`  
 	`echo "KEY=secret" > .env`  
 	`sudo npx pm2 start index.js`  
 	`sudo npx pm2 save`
