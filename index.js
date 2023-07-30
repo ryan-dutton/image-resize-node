@@ -45,9 +45,8 @@ let test_form = `
 				let blob = await result.blob();
 				var imageURL = URL.createObjectURL(blob);
 				document.getElementById('output').src = imageURL;
-				console.log("this is the result:",blob);
 			} catch (e) {
-				console.log("this is the result:",text);
+				console.log("error processing image:",e.message);
 			}
 		}
 	</script>
