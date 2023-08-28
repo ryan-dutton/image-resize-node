@@ -112,6 +112,62 @@ let test_form = `
 		</table>
     	<button type="submit">Upload</button>
 	</form>
+	<h1>File Upload - Direct</h1>
+	<script>
+		const directUpload = async (f) => {
+			let url = "/upload_direct?w="+f.w.value+"&h="+f.h.value+"&f="+f.f.value+"";
+			console.log("URL in directUpload",url);
+			try {
+				let body = f.i.files[0];
+				let result = await fetch(
+					url,
+					{
+						method: 'POST',
+						body,
+						headers: {
+							'Content-Type': 'application/octet-stream',
+							'Authorization': f.k.value
+						}
+					}
+				);
+				let blob = await result.blob();
+				var imageURL = URL.createObjectURL(blob);
+				document.getElementById('output_direct').src = imageURL;
+			} catch (e) {
+				console.log("error processing image:",e.message);
+			}
+		}
+	</script>
+	<form>
+		<table border=1>
+			<tr>
+				<td>File</td>
+				<td><input type="file" name="i" /></td>
+			</tr>
+			<tr>
+				<td>Width</td>
+				<td><input size="5" type=text name="w" value="800"/></td>
+			</tr>
+			<tr>
+				<td>Height</td>
+				<td><input size="5" type=text name="h" value="600"/></td>
+			</tr>
+			<tr>
+				<td>Key</td>
+				<td><input size="50" type=text name="k" value=""/></td>
+			</tr>
+			<tr>
+				<td>Format</td>
+				<td>
+					<input selected type=radio name="f" value="png"/>PNG
+					<input type=radio name="f" value="jpeg"/>JPEG
+					<input type=radio name="f" value="gif"/>GIF
+				</td> 
+			</tr>
+		</table>
+    	<button type="button" onClick="directUpload(this.form)">Upload</button>
+		<img src="" id="output_direct"/>
+	</form>
 </html>
 `;
 
@@ -126,7 +182,7 @@ app.post('/', express.json(), async (req, res) => {
 	try {
 		if (!(req.body.k && req.body.k === process.env.KEY)) {
 			res.status(401);
-			res.send("Invalid key specified.",process.env.KEY);
+			res.send("Invalid key specified."+process.env.KEY);
 			return;
 		}
 		let image_response = await fetch(req.body.u);
@@ -160,7 +216,7 @@ app.post('/upload', express.urlencoded(), fileUpload(), async (req, res) => {
 	try {
 		if (!(req.body.k && req.body.k === process.env.KEY)) {
 			res.status(401);
-			res.send("Invalid key specified."+req.body.k);
+			res.send("Invalid key specified.");
 			return;
 		}
 		let { i } = req.files;
@@ -171,6 +227,34 @@ app.post('/upload', express.urlencoded(), fileUpload(), async (req, res) => {
 			.resize(
 				parseInt(req.body.w),
 				parseInt(req.body.h)
+			)
+			[format](default_output_format_options[format])
+			.toBuffer();
+		res.status(200);
+		res.setHeader('content-type', 'image/'+format);
+		res.send(new_image_buffer);
+		return;
+	} catch (e) {
+		res.status(400);
+		res.send("Error:"+e.message);
+		console.log("processing failed with message:", e.message);
+		return;
+	}
+})
+
+app.post('/upload_direct', express.raw({type: '*/*', limit : '200mb'}), async (req, res) => {
+	try {
+		if (!(req.get("Authorization") && req.get("Authorization") === process.env.KEY)) {
+			res.status(401);
+			res.send("Invalid key specified.");
+			return;
+		}
+		let format = req.query.f && ['jpeg','gif','png'].includes(req.query.f) ? req.query.f : default_output_format;
+		let new_image_buffer =
+			await sharp(req.body)
+			.resize(
+				parseInt(req.query.w),
+				parseInt(req.query.h)
 			)
 			[format](default_output_format_options[format])
 			.toBuffer();
